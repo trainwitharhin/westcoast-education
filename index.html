@@ -1,9 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="sv">
 <head>
-  <title>Westcoast Education</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kurser</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: #f5f2eb;
+      color: #1a1a1a;
+      min-height: 100vh;
+      padding: 3rem 1.5rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 2.5rem;
+      color: #111;
+    }
+
+    #course-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+    }
+
+    .course-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 1.5rem;
+      border-radius: 4px;
+      box-shadow: 2px 2px 0 #c9c4b8;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .course-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0 #c9c4b8;
+    }
+
+    .course-card h2 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .course-card p {
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    #course-list.loading::after {
+      content: 'Laddar kurser…';
+      font-style: italic;
+      color: #888;
+    }
+
+    #course-list.error::after {
+      content: 'Kunde inte hämta kurser.';
+      color: #c0392b;
+    }
+
+    .booking-form {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .booking-form input {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+
+    .booking-form button[type="submit"] {
+      padding: 0.5rem;
+      background: #1a1a1a;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-book {
+      margin-top: 1rem;
+      padding: 0.4rem 0.8rem;
+      background: transparent;
+      border: 1px solid #1a1a1a;
+      border-radius: 3px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.85rem;
+    }
+
+    .btn-book:hover { background: #1a1a1a; color: #fff; }
+  </style>
 </head>
 <body>
-  <h1>Westcoast Education</h1>
+  <h1>Kurser</h1>
+  <div id="course-list" class="loading"></div>
+  <script type="module" src="/js/courses.js"></script>
 </body>
 </html>

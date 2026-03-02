@@ -1,4 +1,30 @@
 {
-  "courses": [],
-  "bookings": []
+  "courses": [
+    {
+      "id": "1",
+      "name": "HTML & CSS",
+      "description": "Grunderna i webbutveckling"
+    },
+    {
+      "id": "2",
+      "name": "JavaScript",
+      "description": "Programmering för webben"
+    },
+    {
+      "id": "3",
+      "name": "Node.js",
+      "description": "Backend med JavaScript"
+    }
+  ],
+  "bookings": [
+    {
+      "id": "64e3",
+      "courseId": 1,
+      "name": "yamfu",
+      "billingAddress": "test",
+      "email": "yamfu.arhin@medieinstitutet.se",
+      "phone": "test"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
