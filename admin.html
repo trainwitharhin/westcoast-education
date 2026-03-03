@@ -135,19 +135,34 @@
 
           <!-- Create form -->
           <div class="panel">
-            <h2 class="panel-title">New Course</h2>
+            <div class="panel-header">
+              <h2 class="panel-title">New Course</h2>
+              <p class="panel-subtitle">Fields marked * are required.</p>
+            </div>
             <form id="course-form" class="course-form" novalidate>
+
+              <!-- Row 1: Title (full width — most important, gets its own row) -->
               <div class="field">
-                <label class="field-label" for="field-title">Title</label>
-                <input id="field-title" name="title" placeholder="e.g. JavaScript Fundamentals" required />
+                <label class="field-label" for="field-title">
+                  Course Title <span class="field-required">*</span>
+                </label>
+                <input
+                  id="field-title"
+                  name="title"
+                  placeholder="e.g. JavaScript Fundamentals"
+                  autocomplete="off"
+                  required
+                />
               </div>
+
+              <!-- Row 2: Number + Type — identity pair -->
               <div class="field-row">
                 <div class="field">
                   <label class="field-label" for="field-number">Course Number</label>
-                  <input id="field-number" name="courseNumber" placeholder="e.g. JS-101" />
+                  <input id="field-number" name="courseNumber" placeholder="e.g. JS-101" autocomplete="off" />
                 </div>
                 <div class="field">
-                  <label class="field-label" for="field-type">Type</label>
+                  <label class="field-label" for="field-type">Delivery Type</label>
                   <select id="field-type" name="type" class="input-select">
                     <option value="classroom">Classroom</option>
                     <option value="distance">Distance</option>
@@ -155,31 +170,70 @@
                   </select>
                 </div>
               </div>
+
+              <!-- Row 3: Duration + Price — commercial pair -->
               <div class="field-row">
                 <div class="field">
-                  <label class="field-label" for="field-days">Duration (days)</label>
-                  <input id="field-days" name="days" type="number" placeholder="5" min="1" />
+                  <label class="field-label" for="field-days">Duration</label>
+                  <div class="input-suffix-wrap">
+                    <input
+                      id="field-days"
+                      name="days"
+                      type="number"
+                      placeholder="5"
+                      min="1"
+                      class="input-with-suffix"
+                    />
+                    <span class="input-suffix">days</span>
+                  </div>
                 </div>
                 <div class="field">
-                  <label class="field-label" for="field-price">Price (kr)</label>
-                  <input id="field-price" name="price" type="number" placeholder="4 999" min="0" />
+                  <label class="field-label" for="field-price">Price</label>
+                  <div class="input-suffix-wrap">
+                    <input
+                      id="field-price"
+                      name="price"
+                      type="number"
+                      placeholder="4 999"
+                      min="0"
+                      class="input-with-suffix"
+                    />
+                    <span class="input-suffix">kr</span>
+                  </div>
                 </div>
               </div>
+
+              <!-- Row 4: Capacity + Description — operational pair -->
               <div class="field-row">
                 <div class="field">
-                  <label class="field-label" for="field-capacity">
-                    Max Seats
-                    <span class="field-hint">0 = unlimited</span>
-                  </label>
-                  <input id="field-capacity" name="capacity" type="number" placeholder="20" min="0" />
+                  <label class="field-label" for="field-capacity">Max Seats</label>
+                  <input
+                    id="field-capacity"
+                    name="capacity"
+                    type="number"
+                    placeholder="Leave blank for unlimited"
+                    min="0"
+                  />
+                  <span class="field-helper">Leave blank or 0 for no limit</span>
                 </div>
                 <div class="field">
                   <label class="field-label" for="field-desc">Description</label>
-                  <input id="field-desc" name="description" placeholder="Short description" />
+                  <input
+                    id="field-desc"
+                    name="description"
+                    placeholder="One sentence overview"
+                    autocomplete="off"
+                  />
+                  <span class="field-helper">Shown on the course card.</span>
                 </div>
               </div>
-              <button type="submit" class="btn-saas">Create Course</button>
-              <p id="status-message" role="status" aria-live="polite"></p>
+
+              <!-- CTA -->
+              <div class="form-footer">
+                <button type="submit" class="btn-saas" id="submit-btn">Create Course</button>
+                <p id="status-message" role="status" aria-live="polite"></p>
+              </div>
+
             </form>
           </div>
 

@@ -892,9 +892,10 @@ body {
   font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.01em;
-  truncate: ellipsis;
+  /* Single-line truncation: all three properties are required */
   white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ================================
@@ -2002,16 +2003,20 @@ tr:last-child td { border-bottom: none; }
 }
 
 .card--featured .card-description--featured {
+  /* Multi-line clamp: -webkit- for Safari, standard for Chrome/Firefox */
   display: -webkit-box;
-  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
   overflow: hidden;
 }
 
 .card-description {
+  /* Multi-line clamp: -webkit- for Safari, standard for Chrome/Firefox */
   display: -webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
 }
 
@@ -2081,4 +2086,117 @@ tr:last-child td { border-bottom: none; }
     align-items: flex-start;
     gap: 12px;
   }
+}
+
+/* ================================
+   Form refinements
+================================ */
+
+/* Consistent vertical rhythm in forms */
+.course-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;    /* was 12px — gives each row room to breathe */
+}
+
+/* Label–input gap: tighter = they read as a unit */
+.field {
+  gap: 6px;
+}
+
+/* 44px min input height — accessibility baseline */
+input, .input-select {
+  min-height: 44px;
+  padding: 0 13px;   /* remove vertical padding — let min-height + flex do it */
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Focus ring — stronger than border alone */
+input:focus, .input-select:focus {
+  border-color: var(--accent);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px rgba(0,102,204,0.08);
+}
+
+/* Required asterisk */
+.field-required {
+  color: var(--danger);
+  font-size: 12px;
+  margin-left: 2px;
+  font-family: var(--font);
+  font-weight: 600;
+}
+
+/* Helper text — below input, lighter than label */
+.field-helper {
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--text-tertiary);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+/* ================================
+   Input with inline suffix (days / kr)
+================================ */
+.input-suffix-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-suffix {
+  padding-right: 44px !important;
+  width: 100%;
+}
+
+.input-suffix {
+  position: absolute;
+  right: 13px;
+  font-size: 12px;
+  font-family: var(--mono);
+  color: var(--text-tertiary);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ================================
+   Form footer — CTA area
+================================ */
+.form-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 6px;   /* extra breathing room before CTA */
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+
+/* CTA button — full width, 48px height */
+.btn-saas {
+  min-height: 48px;
+  border-radius: var(--radius-sm);
+  transition: background var(--t-fast), transform var(--t-fast);
+}
+
+.btn-saas:hover { background: var(--accent-hover); }
+.btn-saas:active { transform: scale(0.99); }
+
+/* Status message aligned left under button */
+#status-message {
+  font-size: 12px;
+  font-family: var(--mono);
+  min-height: 16px;
+}
+
+/* ================================
+   Field row — balanced columns
+================================ */
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: start;  /* align to label top, not center */
 }

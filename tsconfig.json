@@ -1,12 +1,54 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "CommonJS",
+    /* ── Target & Library ─────────────────────────────────────────
+       ES2017 gives us Array.includes(), Object.entries(), async/await
+       and all other modern builtins without requiring a polyfill.
+       Never use ES5 or ES6 for new projects — they predate includes().
+    ──────────────────────────────────────────────────────────────── */
+    "target": "ES2017",
+    "lib": ["ES2017", "DOM"],
+
+    /* ── Module system ────────────────────────────────────────────
+       ESNext modules = native import/export, matches our JS files.
+       bundler resolution works with Vite/esbuild if added later;
+       node works for Jest today.
+    ──────────────────────────────────────────────────────────────── */
+    "module": "ESNext",
+    "moduleResolution": "node",
+
+    /* ── Type safety ──────────────────────────────────────────────
+       strict = strictNullChecks + noImplicitAny + strictFunctionTypes
+       + strictPropertyInitialization + all other strict flags.
+       Always enable strict — it catches real bugs.
+    ──────────────────────────────────────────────────────────────── */
     "strict": true,
+
+    /* ── Output ───────────────────────────────────────────────────
+       outDir keeps compiled JS out of src/.
+       rootDir keeps the compiler scoped to src/.
+    ──────────────────────────────────────────────────────────────── */
+    "outDir": "./dist",
+    "rootDir": "./src",
+
+    /* ── Interop ──────────────────────────────────────────────────
+       esModuleInterop lets us import CommonJS modules (like Jest)
+       without * as syntax. forceConsistentCasingInFileNames
+       prevents case-sensitivity bugs across OS:es.
+    ──────────────────────────────────────────────────────────────── */
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* ── Source maps ──────────────────────────────────────────────
+       Gives readable stack traces in Jest output and DevTools.
+    ──────────────────────────────────────────────────────────────── */
     "sourceMap": true,
-    "skipLibCheck": true,
-    "types": ["jest"]
+
+    /* ── Skip lib check ───────────────────────────────────────────
+       Skips type checking of .d.ts files in node_modules.
+       Safe and dramatically speeds up compilation.
+    ──────────────────────────────────────────────────────────────── */
+    "skipLibCheck": true
   },
-  "include": ["src"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

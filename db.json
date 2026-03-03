@@ -7,7 +7,9 @@
       "description": "Foundations of modern web development.",
       "courseNumber": "HC-101",
       "days": 20,
-      "price": 2900
+      "price": 2900,
+      "type": "classroom",
+      "capacity": 0
     },
     {
       "id": "2",
@@ -16,7 +18,9 @@
       "description": "Programming for the modern web.",
       "courseNumber": "JS-201",
       "days": 30,
-      "price": 3900
+      "price": 3900,
+      "type": "classroom",
+      "capacity": 0
     },
     {
       "id": "3",
@@ -25,7 +29,9 @@
       "description": "Backend development with JavaScript.",
       "courseNumber": "ND-301",
       "days": 30,
-      "price": 4200
+      "price": 4200,
+      "type": "distance",
+      "capacity": 0
     },
     {
       "id": "4",
@@ -34,7 +40,9 @@
       "description": "Introduction to distributed systems and decentralized technology.",
       "courseNumber": "BC-401",
       "days": 20,
-      "price": 4500
+      "price": 4500,
+      "type": "classroom",
+      "capacity": 0
     },
     {
       "id": "5",
@@ -43,7 +51,9 @@
       "description": "Build and deploy smart contracts on Ethereum.",
       "courseNumber": "SC-501",
       "days": 25,
-      "price": 5200
+      "price": 5200,
+      "type": "ondemand",
+      "capacity": 0
     }
   ],
   "bookings": [
@@ -63,6 +73,5 @@
       "email": "yamfu.arhin@medieinstitutet.se",
       "phone": "0768767691"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }
