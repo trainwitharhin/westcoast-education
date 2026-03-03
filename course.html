@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course – Westcoast Education</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="public-body">
+
+  <header class="topbar">
+    <a href="/index.html" class="topbar-brand">Westcoast Education</a>
+    <nav class="topbar-nav">
+      <a href="/index.html" class="topbar-nav-link">Courses</a>
+      <a href="/admin.html" class="topbar-nav-link">Admin</a>
+    </nav>
+  </header>
+
+  <div class="breadcrumb-bar">
+    <div class="page-wrapper">
+      <a href="/index.html" class="breadcrumb-link">← All Courses</a>
+    </div>
+  </div>
+
+  <section class="detail-section">
+    <div class="page-wrapper">
+      <div id="course-detail"></div>
+    </div>
+  </section>
+
+  <!-- Booking modal -->
+  <div id="booking-modal" class="modal-overlay" hidden>
+    <div id="modal-inner" class="modal-box" role="dialog" aria-modal="true"></div>
+  </div>
+
+  <script type="module" src="/js/course.js"></script>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="page-wrapper">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="footer-brand-name">Westcoast Education</span>
+          <span class="footer-tagline">Professional developer programs</span>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <a href="/index.html" class="footer-link">Courses</a>
+          <a href="/login.html" class="footer-link">Admin</a>
+        </nav>
+        <p class="footer-copy">© 2025 Westcoast Education</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

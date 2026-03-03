@@ -1,39 +1,351 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin</title>
-  <style>
-    body { font-family: sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
-    h1, h2 { margin-bottom: 1rem; }
-    form { display: flex; flex-direction: column; gap: 0.5rem; max-width: 360px; margin-bottom: 2rem; }
-    input { padding: 0.4rem; font-size: 1rem; }
-    button { padding: 0.4rem; cursor: pointer; }
-    .course-group { margin-bottom: 1.5rem; }
-    .course-group h3 { margin-bottom: 0.4rem; border-bottom: 1px solid #ccc; padding-bottom: 0.2rem; }
-    table { border-collapse: collapse; width: 100%; }
-    td, th { text-align: left; padding: 0.3rem 0.6rem; border-bottom: 1px solid #eee; }
-    th { font-weight: bold; }
-  </style>
+  <title>Admin – Westcoast Education</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
 </head>
-<body>
-  <h1>Admin</h1>
+<body class="admin-body">
 
-  <h2>Skapa ny kurs</h2>
-  <form id="course-form">
-    <input name="title"        placeholder="Titel"         required />
-    <input name="courseNumber" placeholder="Kursnummer"    required />
-    <input name="days"         placeholder="Antal dagar"   type="number" required />
-    <input name="price"        placeholder="Pris (kr)"     type="number" required />
-    <button type="submit">Skapa kurs</button>
-  </form>
+  <!-- Topbar — single source of "Back to site" -->
+  <header class="topbar">
+    <a href="/index.html" class="topbar-brand">Westcoast Education</a>
+    <nav class="topbar-nav">
+      <span class="topbar-context">Admin</span>
+      <button class="topbar-nav-link topbar-logout-btn" id="logout-btn">Sign out</button>
 
-  <p id="status-message"></p>
+    </nav>
+  </header>
 
-  <h2>Bokningar per kurs</h2>
-  <div id="booking-list">Laddar...</div>
+  <div class="admin-layout">
 
+    <!-- ═══ SIDEBAR — internal navigation only ═══ -->
+    <aside class="sidebar" id="sidebar" aria-label="Admin navigation">
+
+      <button class="sidebar-collapse-btn" id="sidebar-toggle" aria-label="Toggle sidebar">
+        <span class="collapse-icon">←</span>
+      </button>
+
+      <div class="sidebar-section-label">Platform</div>
+      <nav class="sidebar-nav">
+        <a href="#overview" class="sidebar-link" data-view="overview">
+          <span class="sidebar-indicator"></span>
+          <span class="sidebar-icon">◎</span>
+          <span class="sidebar-label">Overview</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-section-label">Manage</div>
+      <nav class="sidebar-nav">
+        <a href="#courses" class="sidebar-link" data-view="courses">
+          <span class="sidebar-indicator"></span>
+          <span class="sidebar-icon">⊞</span>
+          <span class="sidebar-label">Courses</span>
+          <span class="sidebar-badge" id="badge-courses"></span>
+        </a>
+        <a href="#bookings" class="sidebar-link" data-view="bookings">
+          <span class="sidebar-indicator"></span>
+          <span class="sidebar-icon">☰</span>
+          <span class="sidebar-label">Bookings</span>
+          <span class="sidebar-badge" id="badge-bookings"></span>
+        </a>
+      </nav>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-section-label">System</div>
+      <nav class="sidebar-nav">
+        <a href="#settings" class="sidebar-link" data-view="settings">
+          <span class="sidebar-indicator"></span>
+          <span class="sidebar-icon">⚙</span>
+          <span class="sidebar-label">Settings</span>
+        </a>
+      </nav>
+
+      <!-- Footer: version only — no duplicate nav -->
+      <div class="sidebar-footer">
+        <div class="sidebar-version">v1.0 · local</div>
+      </div>
+
+    </aside>
+
+    <!-- ═══ MAIN ═══ -->
+    <main class="admin-main" id="admin-main">
+
+      <!-- ── VIEW: OVERVIEW ── -->
+      <section class="admin-view" id="view-overview" aria-label="Overview">
+        <div class="view-header">
+          <div>
+            <p class="view-eyebrow">Platform</p>
+            <h1 class="admin-title">Overview</h1>
+            <p class="admin-subtitle">Monitor platform activity at a glance.</p>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-label">Total Courses</span>
+            <span class="kpi-value" id="kpi-courses">—</span>
+            <span class="kpi-hint">in catalog</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">Total Bookings</span>
+            <span class="kpi-value" id="kpi-bookings">—</span>
+            <span class="kpi-hint">across all courses</span>
+          </div>
+          <div class="kpi-card kpi-card--alert" id="kpi-full-card">
+            <span class="kpi-label">Full Courses</span>
+            <span class="kpi-value" id="kpi-full">—</span>
+            <span class="kpi-hint">at capacity</span>
+          </div>
+        </div>
+
+        <div class="overview-grid">
+          <div class="panel">
+            <h2 class="panel-title">Recent Bookings</h2>
+            <div id="recent-bookings-list"><p class="empty-body">Loading…</p></div>
+          </div>
+          <div class="panel">
+            <h2 class="panel-title">Quick Actions</h2>
+            <div class="quick-actions">
+              <a href="#courses" class="quick-action-btn" data-view="courses">+ Add new course</a>
+              <a href="#bookings" class="quick-action-btn" data-view="bookings">View all bookings</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── VIEW: COURSES ── -->
+      <section class="admin-view" id="view-courses" aria-label="Courses">
+        <div class="view-header">
+          <div>
+            <p class="view-eyebrow">Manage</p>
+            <h1 class="admin-title">Courses</h1>
+            <p class="admin-subtitle">Create courses and manage capacity.</p>
+          </div>
+        </div>
+
+        <div class="admin-panels">
+
+          <!-- Create form -->
+          <div class="panel">
+            <h2 class="panel-title">New Course</h2>
+            <form id="course-form" class="course-form" novalidate>
+              <div class="field">
+                <label class="field-label" for="field-title">Title</label>
+                <input id="field-title" name="title" placeholder="e.g. JavaScript Fundamentals" required />
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label class="field-label" for="field-number">Course Number</label>
+                  <input id="field-number" name="courseNumber" placeholder="e.g. JS-101" />
+                </div>
+                <div class="field">
+                  <label class="field-label" for="field-type">Type</label>
+                  <select id="field-type" name="type" class="input-select">
+                    <option value="classroom">Classroom</option>
+                    <option value="distance">Distance</option>
+                    <option value="ondemand">On-Demand</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label class="field-label" for="field-days">Duration (days)</label>
+                  <input id="field-days" name="days" type="number" placeholder="5" min="1" />
+                </div>
+                <div class="field">
+                  <label class="field-label" for="field-price">Price (kr)</label>
+                  <input id="field-price" name="price" type="number" placeholder="4 999" min="0" />
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label class="field-label" for="field-capacity">
+                    Max Seats
+                    <span class="field-hint">0 = unlimited</span>
+                  </label>
+                  <input id="field-capacity" name="capacity" type="number" placeholder="20" min="0" />
+                </div>
+                <div class="field">
+                  <label class="field-label" for="field-desc">Description</label>
+                  <input id="field-desc" name="description" placeholder="Short description" />
+                </div>
+              </div>
+              <button type="submit" class="btn-saas">Create Course</button>
+              <p id="status-message" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+
+          <!-- Course list -->
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">All Courses</h2>
+              <p class="panel-subtitle">Click ⊘ Capacity to edit seats for any course.</p>
+            </div>
+            <div id="admin-course-list"><p class="empty-body">Loading…</p></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── VIEW: BOOKINGS ── -->
+      <section class="admin-view" id="view-bookings" aria-label="Bookings">
+        <div class="view-header">
+          <div>
+            <p class="view-eyebrow">Manage</p>
+            <h1 class="admin-title">Bookings</h1>
+            <p class="admin-subtitle">All registrations grouped by course.</p>
+          </div>
+          <div class="view-header-meta" id="bookings-total-badge"></div>
+        </div>
+        <div class="panel panel--bookings">
+          <div id="booking-list"><p class="empty-body">Loading…</p></div>
+        </div>
+      </section>
+
+      <!-- ── VIEW: SETTINGS ── -->
+      <section class="admin-view" id="view-settings" aria-label="Settings">
+        <div class="view-header">
+          <div>
+            <p class="view-eyebrow">System</p>
+            <h1 class="admin-title">Settings</h1>
+            <p class="admin-subtitle">Platform configuration and preferences.</p>
+          </div>
+        </div>
+        <div class="settings-grid">
+          <div class="panel">
+            <h2 class="panel-title">Platform</h2>
+            <div class="settings-list">
+              <div class="settings-row">
+                <div>
+                  <p class="settings-row-label">Platform name</p>
+                  <p class="settings-row-hint">Displayed in the topbar and emails.</p>
+                </div>
+                <span class="settings-row-value">Westcoast Education</span>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <p class="settings-row-label">API endpoint</p>
+                  <p class="settings-row-hint">json-server REST base URL.</p>
+                </div>
+                <span class="settings-row-value mono">http://localhost:3000</span>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <p class="settings-row-label">Environment</p>
+                  <p class="settings-row-hint">Current runtime context.</p>
+                </div>
+                <span class="settings-row-value">
+                  <span class="course-tag tag--distance">local</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="panel">
+            <h2 class="panel-title">About</h2>
+            <div class="settings-list">
+              <div class="settings-row">
+                <div>
+                  <p class="settings-row-label">Version</p>
+                  <p class="settings-row-hint">Application version.</p>
+                </div>
+                <span class="settings-row-value mono">v1.0.0</span>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <p class="settings-row-label">Stack</p>
+                  <p class="settings-row-hint">Technologies in use.</p>
+                </div>
+                <span class="settings-row-value mono">Vanilla JS · json-server</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // Auth guard
+    if (!sessionStorage.getItem("we_admin_auth")) {
+      window.location.replace("/login.html");
+    }
+  </script>
   <script type="module" src="/js/admin.js"></script>
+
+  <script>
+    (() => {
+      const VIEWS   = ['overview', 'courses', 'bookings', 'settings'];
+      const DEFAULT = 'overview';
+      const sidebar  = document.getElementById('sidebar');
+      const toggle   = document.getElementById('sidebar-toggle');
+      const mainEl   = document.getElementById('admin-main');
+      const COLLAPSE_KEY = 'we_sidebar_collapsed';
+
+      // ── Collapse ──────────────────────────────────────
+      function setCollapsed(v) {
+        sidebar.classList.toggle('sidebar--collapsed', v);
+        mainEl.classList.toggle('admin-main--expanded', v);
+        toggle.querySelector('.collapse-icon').textContent = v ? '→' : '←';
+        localStorage.setItem(COLLAPSE_KEY, v ? '1' : '');
+      }
+
+      toggle.addEventListener('click', () => setCollapsed(!sidebar.classList.contains('sidebar--collapsed')));
+      if (localStorage.getItem(COLLAPSE_KEY)) setCollapsed(true);
+
+      // ── Routing ───────────────────────────────────────
+      function showView(name) {
+        const view = VIEWS.includes(name) ? name : DEFAULT;
+        VIEWS.forEach(id => {
+          document.getElementById(`view-${id}`)?.classList.toggle('view--active', id === view);
+        });
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+          const match = link.dataset.view === view;
+          link.classList.toggle('active', match);
+          link.setAttribute('aria-current', match ? 'page' : 'false');
+        });
+        document.title = `${view.charAt(0).toUpperCase() + view.slice(1)} – Admin – Westcoast Education`;
+        mainEl.scrollTop = 0;
+      }
+
+      function route() {
+        showView(window.location.hash.replace('#', '').trim() || DEFAULT);
+      }
+
+      window.addEventListener('hashchange', route);
+      route();
+
+      // ── Badge updater (called by admin.js) ────────────
+      window.updateSidebarBadges = (courses, bookings) => {
+        const bc = document.getElementById('badge-courses');
+        const bb = document.getElementById('badge-bookings');
+        if (bc) { bc.textContent = courses;  bc.style.display = courses  > 0 ? 'flex' : 'none'; }
+        if (bb) { bb.textContent = bookings; bb.style.display = bookings > 0 ? 'flex' : 'none'; }
+      };
+
+      // ── Quick action links ────────────────────────────
+      document.querySelectorAll('.quick-action-btn[data-view]').forEach(el => {
+        el.addEventListener('click', e => {
+          e.preventDefault();
+          window.location.hash = el.dataset.view;
+        });
+      });
+    })();
+  </script>
+
+  <script>
+    document.getElementById("logout-btn")?.addEventListener("click", () => {
+      sessionStorage.removeItem("we_admin_auth");
+      window.location.replace("/login.html");
+    });
+  </script>
 </body>
 </html>

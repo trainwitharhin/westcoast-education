@@ -3,17 +3,47 @@
     {
       "id": "1",
       "name": "HTML & CSS",
-      "description": "Grunderna i webbutveckling"
+      "title": "HTML & CSS",
+      "description": "Foundations of modern web development.",
+      "courseNumber": "HC-101",
+      "days": 20,
+      "price": 2900
     },
     {
       "id": "2",
       "name": "JavaScript",
-      "description": "Programmering för webben"
+      "title": "JavaScript",
+      "description": "Programming for the modern web.",
+      "courseNumber": "JS-201",
+      "days": 30,
+      "price": 3900
     },
     {
       "id": "3",
       "name": "Node.js",
-      "description": "Backend med JavaScript"
+      "title": "Node.js",
+      "description": "Backend development with JavaScript.",
+      "courseNumber": "ND-301",
+      "days": 30,
+      "price": 4200
+    },
+    {
+      "id": "4",
+      "name": "Basics of Blockchain",
+      "title": "Basics of Blockchain",
+      "description": "Introduction to distributed systems and decentralized technology.",
+      "courseNumber": "BC-401",
+      "days": 20,
+      "price": 4500
+    },
+    {
+      "id": "5",
+      "name": "Smart Contracts",
+      "title": "Smart Contracts",
+      "description": "Build and deploy smart contracts on Ethereum.",
+      "courseNumber": "SC-501",
+      "days": 25,
+      "price": 5200
     }
   ],
   "bookings": [
@@ -24,6 +54,14 @@
       "billingAddress": "test",
       "email": "yamfu.arhin@medieinstitutet.se",
       "phone": "test"
+    },
+    {
+      "id": "7648",
+      "courseId": 1,
+      "name": "yamfu arhin",
+      "billingAddress": "friherregatan 58",
+      "email": "yamfu.arhin@medieinstitutet.se",
+      "phone": "0768767691"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

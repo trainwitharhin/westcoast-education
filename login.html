@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login – Westcoast Education</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="login-body">
+
+  <div class="login-layout">
+
+    <!-- Left panel — brand -->
+    <div class="login-brand-panel">
+      <div class="login-brand-content">
+        <a href="/index.html" class="login-brand-name">Westcoast Education</a>
+        <p class="login-brand-tagline">
+          The admin console for managing courses,<br>bookings, and platform settings.
+        </p>
+        <div class="login-brand-meta">
+          <span class="course-tag tag--distance">Admin access only</span>
+        </div>
+      </div>
+      <p class="login-brand-footer">← <a href="/index.html" class="login-back-link">Back to public site</a></p>
+    </div>
+
+    <!-- Right panel — form -->
+    <div class="login-form-panel">
+      <div class="login-form-wrap">
+
+        <div class="login-header">
+          <p class="view-eyebrow">Westcoast Education</p>
+          <h1 class="login-title">Sign in to Admin</h1>
+          <p class="login-subtitle">Enter your credentials to access the dashboard.</p>
+        </div>
+
+        <form id="login-form" class="login-form" novalidate>
+          <div class="field">
+            <label class="field-label" for="login-email">Email</label>
+            <input
+              id="login-email"
+              name="email"
+              type="email"
+              placeholder="admin@westcoast.se"
+              autocomplete="email"
+              required
+            />
+          </div>
+          <div class="field">
+            <label class="field-label" for="login-password">
+              Password
+              <span class="field-hint">demo: admin123</span>
+            </label>
+            <div class="password-wrap">
+              <input
+                id="login-password"
+                name="password"
+                type="password"
+                placeholder="••••••••"
+                autocomplete="current-password"
+                required
+              />
+              <button type="button" class="password-toggle" id="pw-toggle" aria-label="Show password">
+                <span id="pw-icon">👁</span>
+              </button>
+            </div>
+          </div>
+
+          <p id="login-error" class="login-error" role="alert" aria-live="assertive"></p>
+
+          <button type="submit" class="btn-saas" id="login-btn">Sign In</button>
+        </form>
+
+        <p class="login-disclaimer">
+          This is a proof-of-concept admin interface.<br>
+          Authentication is client-side only.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ── Simple client-side auth ────────────────────────────
+    // In a real system this would be a backend JWT flow.
+    const ADMIN_EMAIL    = 'admin@westcoast.se';
+    const ADMIN_PASSWORD = 'admin123';
+    const SESSION_KEY    = 'we_admin_auth';
+
+    // Already logged in?
+    if (sessionStorage.getItem(SESSION_KEY)) {
+      window.location.replace('/admin.html');
+    }
+
+    const form     = document.getElementById('login-form');
+    const errorEl  = document.getElementById('login-error');
+    const loginBtn = document.getElementById('login-btn');
+
+    // Password toggle
+    document.getElementById('pw-toggle').addEventListener('click', () => {
+      const input = document.getElementById('login-password');
+      const icon  = document.getElementById('pw-icon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        icon.textContent = '👁';
+      }
+    });
+
+    // Form submit
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      errorEl.textContent = '';
+
+      const email    = form.email.value.trim().toLowerCase();
+      const password = form.password.value;
+
+      loginBtn.textContent = 'Signing in…';
+      loginBtn.disabled = true;
+
+      // Simulate async check
+      setTimeout(() => {
+        if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+          sessionStorage.setItem(SESSION_KEY, '1');
+          window.location.replace('/admin.html');
+        } else {
+          errorEl.textContent = 'Incorrect email or password.';
+          loginBtn.textContent = 'Sign In';
+          loginBtn.disabled = false;
+          document.getElementById('login-password').value = '';
+          document.getElementById('login-password').focus();
+        }
+      }, 400);
+    });
+  </script>
+
+</body>
+</html>
