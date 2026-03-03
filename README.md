@@ -48,12 +48,16 @@ Admin-panelen är skyddad med client-side autentisering.
 ├── login.html          # Adminlösenordsskyddad inloggningssida
 ├── styles.css          # Komplett stylesheet (CSS custom properties)
 ├── db.json             # json-server databas (kurser + bokningar)
+├── tsconfig.json       # TypeScript-konfiguration (target: ES2017)
 ├── package.json
-└── js/
-    ├── api.js          # REST API-lager (getCourses, postBooking m.fl.)
-    ├── courses.js      # Publikt kursgalleri — filter, sökning, rendering
-    ├── course.js       # Kursdetaljsida — bokningsmodal och bekräftelse
-    └── admin.js        # Adminlogik — KPI, kurslistning, bokningar
+├── js/
+│   ├── api.js          # REST API-lager (getCourses, postBooking m.fl.)
+│   ├── courses.js      # Publikt kursgalleri — filter, sökning, rendering
+│   ├── course.js       # Kursdetaljsida — bokningsmodal och bekräftelse
+│   └── admin.js        # Adminlogik — KPI, kurslistning, bokningar
+└── src/
+    ├── api.ts          # TypeScript-modul med interfaces och validering
+    └── api.test.ts     # Jest-testsvit (16 testfall, TDD)
 ```
 
 ---
@@ -177,3 +181,56 @@ admin.html
 5. Navigera till `login.html` → logga in med `admin@westcoast.se` / `admin123`
 6. Verifiera att bokningen syns i admin under Bookings
 7. Skapa en ny kurs i admin → verifiera att den dyker upp på framsidan
+
+---
+
+## TypeScript & TDD
+
+TypeScript-modulen finns i `src/` och täcker kursvalidering med fullständig typning.
+
+### Kör tester
+
+```bash
+npx jest
+```
+
+### Vad testas
+
+`buildCoursePayload()` i `src/api.ts` är implementerad enligt TDD-principen:
+
+| Kategori | Testfall |
+|----------|----------|
+| Happy path | Korrekt payload returneras, defaults sätts, whitespace trimmas, courseNumber normaliseras till uppercase |
+| Titel | Tom sträng, enbart whitespace, för kort (< 2 tecken) |
+| Dagar | 0 dagar, negativt tal, decimaltal |
+| Pris | Negativt pris, gratis kurs (0 kr) godkänns |
+| Kapacitet | Negativt tal, decimaltal, 0 = unlimited godkänns |
+
+### Typer
+
+```typescript
+type CourseType = 'classroom' | 'distance' | 'ondemand'
+
+interface Course {
+  id, title, courseNumber, type, days, price, capacity, description
+}
+
+interface Booking {
+  id, courseId, name, email, billingAddress, phone
+}
+```
+
+`ValidationError` kastas med ett läsbart felmeddelande som kan visas direkt i UI:t.
+
+---
+
+## Kända buggar & åtgärder
+
+Under utveckling identifierades och åtgärdades följande tekniska problem:
+
+| Problem | Orsak | Åtgärd |
+|---------|-------|--------|
+| `Array.includes()` TS-fel | `tsconfig.json` saknades — TypeScript kände inte till ES2017-builtins | Skapade `tsconfig.json` med `target: ES2017`. Bytte även till `Set.has()` som är O(1) och target-oberoende |
+| `db.json` — Expected array | `$schema`-nyckeln på rotnivå är en sträng — json-server kräver att alla rotnycklar är arrays | Tog bort `$schema`. Lade till saknade `type` och `capacity` på kursobjekten |
+| CSS `truncate: ellipsis` | Påhittad property — finns inte i CSS-specen | Ersatt med korrekt trippel: `white-space: nowrap` + `overflow: hidden` + `text-overflow: ellipsis` |
+| CSS `-webkit-line-clamp` utan standard | Vendor-prefix utan motsvarande standardproperty | Lade till `line-clamp` utan prefix — stöds i Chrome 120+, Firefox 126+, Safari via `-webkit-` |
